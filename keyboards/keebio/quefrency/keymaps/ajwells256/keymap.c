@@ -61,6 +61,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+
+/*       LED indices
+ * --------------------------
+ * | 4  5  6  7  8  9 10 11 |
+ * |   						|
+ * | 3  2  1  0 15 14 13 12 |
+ * --------------------------
+ */
+
+/*
+ * Configure default layer state
+ * 
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+
+	return state;
+} */
+
+/*
+ * Custom configurations during a layer change
+ */
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, _GAMING)) {
+        rgblight_mode(RGBLIGHT_MODE_RAINBOW_SWIRL + 2);
+        rgblight_set_speed_noeeprom(2);
+    } else if (layer_state_cmp(state, _DEBUGGING)) {
+        rgblight_mode(RGBLIGHT_MODE_KNIGHT);
+    } else {
+        // restore default, see qmk_firmware/keyboards/keebio/quefrency/rev3.c
+        rgblight_mode(RGBLIGHT_MODE_RAINBOW_SWIRL + 2);
+        // speed seems to be a 0-3 value based on qmk_firmware/quantum/rgblight/rgblight.c defaulting to 0
+        rgblight_set_speed_noeeprom(0);
+    }
+	return state;
+}
+
 #if defined(ENCODER_MAP_ENABLE)
 // [layer count][NUM_ENCODERS is a macro and pre-defined][2 because the ENCODER_CCW_CW macro expands to an array of two key codes]
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
